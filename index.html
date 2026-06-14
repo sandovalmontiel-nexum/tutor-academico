@@ -1279,7 +1279,10 @@ Level: ${level}`;
   }));
   msgs.push({ role: 'user', content: userMsg });
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  // Proxy Cloudflare Worker — evita el bloqueo CORS del navegador
+  const PROXY_URL = 'https://tutor-proxy.sandovalmontiel.workers.dev';
+
+  const res = await fetch(PROXY_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-api-key': state.apiKey, 'anthropic-version': '2023-06-01' },
     body: JSON.stringify({
