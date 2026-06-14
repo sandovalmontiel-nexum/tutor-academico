@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tutor Académico Virtual | Dr. Sandoval</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9922A;
+    --gold-light: #E8B84B;
+    --gold-pale: #F5DFA0;
+    --gold-dim: #7A5518;
+    --bg-deep: #0A0A0B;
+    --bg-panel: #111113;
+    --bg-card: #18181C;
+    --bg-hover: #1F1F25;
+    --border: rgba(201,146,42,0.18);
+    --border-bright: rgba(201,146,42,0.45);
+    --text-primary: #F0EDE6;
+    --text-secondary: #9B9489;
+    --text-muted: #5A5550;
+    --english: #4A9EBF;
+    --physics: #7B6BCA;
+    --chemistry: #5AAB7C;
+    --english-dim: rgba(74,158,191,0.12);
+    --physics-dim: rgba(123,107,202,0.12);
+    --chemistry-dim: rgba(90,171,124,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--bg-panel);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .logo-mark {
+    width: 38px;
+    height: 38px;
+    border: 1.5px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--gold);
+    letter-spacing: -1px;
+  }
+
+  .logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    color: var(--text-primary);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .logo-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+
+  .lang-toggle {
+    display: flex;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    border-radius: 4px;
+  }
+
+  .lang-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 14px;
+    cursor: pointer;
+    letter-spacing: 0.08em;
+    transition: all 0.2s;
+  }
+
+  .lang-btn.active {
+    background: var(--gold);
+    color: var(--bg-deep);
+  }
+
+  /* SUBJECT SELECTOR */
+  .subject-bar {
+    background: var(--bg-panel);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    gap: 0;
+  }
+
+  .subject-tab {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 14px 22px;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .subject-tab:hover { color: var(--text-primary); }
+
+  .subject-tab.active-english {
+    color: var(--english);
+    border-bottom-color: var(--english);
+  }
+  .subject-tab.active-physics {
+    color: var(--physics);
+    border-bottom-color: var(--physics);
+  }
+  .subject-tab.active-chemistry {
+    color: var(--chemistry);
+    border-bottom-color: var(--chemistry);
+  }
+
+  .tab-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.7;
+  }
+
+  /* MAIN LAYOUT */
+  .main {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    flex: 1;
+    overflow: hidden;
+    height: calc(100vh - 113px);
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    background: var(--bg-panel);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .sidebar-section {
+    padding: 1.25rem 1.25rem 0.75rem;
+  }
+
+  .sidebar-title {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .topic-btn {
+    width: 100%;
+    background: none;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    color: var(--text-secondary);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    padding: 9px 12px;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 3px;
+    transition: all 0.15s;
+    line-height: 1.4;
+  }
+
+  .topic-btn:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+    border-color: var(--border);
+  }
+
+  .topic-btn.active {
+    border-color: var(--border-bright);
+    color: var(--text-primary);
+  }
+
+  .topic-btn.active-english { background: var(--english-dim); }
+  .topic-btn.active-physics { background: var(--physics-dim); }
+  .topic-btn.active-chemistry { background: var(--chemistry-dim); }
+
+  .topic-icon {
+    font-size: 14px;
+    opacity: 0.8;
+    flex-shrink: 0;
+  }
+
+  .level-badge {
+    margin-left: auto;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    padding: 2px 6px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  .badge-bach { background: rgba(201,146,42,0.15); color: var(--gold-light); }
+  .badge-uni { background: rgba(123,107,202,0.15); color: #9B8FDB; }
+  .badge-both { background: rgba(255,255,255,0.06); color: var(--text-muted); }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0.5rem 1.25rem;
+  }
+
+  /* CHAT AREA */
+  .chat-area {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--bg-deep);
+  }
+
+  /* SUBJECT HEADER in chat */
+  .chat-header {
+    padding: 1.25rem 2rem 1rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-panel);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .chat-subject-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .chat-topic-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 2px;
+    letter-spacing: 0.04em;
+  }
+
+  .level-chips {
+    display: flex;
+    gap: 6px;
+  }
+
+  .chip {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: all 0.15s;
+  }
+
+  .chip.active {
+    border-color: var(--border-bright);
+    color: var(--gold-light);
+    background: rgba(201,146,42,0.1);
+  }
+
+  /* MESSAGES */
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    scroll-behavior: smooth;
+  }
+
+  .messages::-webkit-scrollbar { width: 4px; }
+  .messages::-webkit-scrollbar-track { background: transparent; }
+  .messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .msg-row {
+    display: flex;
+    gap: 12px;
+    animation: fadeUp 0.3s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .msg-row.user { flex-direction: row-reverse; }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .avatar-tutor {
+    background: rgba(201,146,42,0.15);
+    border: 1px solid var(--border-bright);
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+  }
+
+  .avatar-user {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 11px;
+  }
+
+  .bubble {
+    max-width: 78%;
+    padding: 12px 16px;
+    border-radius: 2px 12px 12px 12px;
+    font-size: 14.5px;
+    line-height: 1.75;
+    color: var(--text-primary);
+  }
+
+  .bubble-tutor {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 2px 12px 12px 12px;
+  }
+
+  .bubble-user {
+    background: rgba(201,146,42,0.12);
+    border: 1px solid rgba(201,146,42,0.2);
+    border-radius: 12px 2px 12px 12px;
+    color: var(--text-primary);
+  }
+
+  .bubble strong { color: var(--gold-light); font-weight: 500; }
+  .bubble em { color: var(--text-secondary); font-style: italic; }
+
+  .bubble code {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    color: var(--gold-pale);
+  }
+
+  .bubble pre {
+    background: rgba(0,0,0,0.35);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin: 8px 0;
+    overflow-x: auto;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--gold-pale);
+  }
+
+  .bubble ul, .bubble ol {
+    padding-left: 1.25rem;
+    margin: 8px 0;
+  }
+
+  .bubble li { margin-bottom: 4px; }
+
+  .bubble p { margin-bottom: 8px; }
+  .bubble p:last-child { margin-bottom: 0; }
+
+  .bubble h3, .bubble h4 {
+    font-family: 'Playfair Display', serif;
+    color: var(--gold-light);
+    margin: 12px 0 6px;
+    font-size: 15px;
+  }
+
+  .typing-indicator {
+    display: flex;
+    gap: 4px;
+    padding: 14px 16px;
+    align-items: center;
+  }
+
+  .dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: bounce 1.2s ease infinite;
+  }
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes bounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-5px); opacity: 1; }
+  }
+
+  /* QUICK PROMPTS */
+  .quick-prompts {
+    padding: 0.75rem 2rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    background: var(--bg-panel);
+  }
+
+  .quick-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--text-secondary);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .quick-btn:hover {
+    border-color: var(--border-bright);
+    color: var(--gold-light);
+    background: rgba(201,146,42,0.08);
+  }
+
+  /* INPUT AREA */
+  .input-area {
+    padding: 1rem 2rem 1.25rem;
+    border-top: 1px solid var(--border);
+    background: var(--bg-panel);
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+
+  .msg-input {
+    flex: 1;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    padding: 11px 16px;
+    resize: none;
+    min-height: 44px;
+    max-height: 120px;
+    outline: none;
+    line-height: 1.5;
+    transition: border-color 0.2s;
+  }
+
+  .msg-input::placeholder { color: var(--text-muted); }
+  .msg-input:focus { border-color: var(--border-bright); }
+
+  .send-btn {
+    background: var(--gold);
+    border: none;
+    border-radius: 8px;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+
+  .send-btn:hover { background: var(--gold-light); }
+  .send-btn:disabled { background: var(--text-muted); cursor: not-allowed; }
+
+  .send-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: var(--bg-deep);
+  }
+
+  /* WELCOME SCREEN */
+  .welcome {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding: 3rem;
+    text-align: center;
+  }
+
+  .welcome-mark {
+    width: 64px;
+    height: 64px;
+    border: 1.5px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--gold);
+    margin: 0 auto;
+  }
+
+  .welcome h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  .welcome p {
+    font-size: 14.5px;
+    color: var(--text-secondary);
+    max-width: 440px;
+    line-height: 1.7;
+  }
+
+  .subject-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    width: 100%;
+    max-width: 520px;
+  }
+
+  .subject-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .subject-card:hover { border-color: var(--border-bright); background: var(--bg-hover); }
+
+  .subject-card-icon { font-size: 26px; margin-bottom: 8px; }
+  .subject-card-name {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .subject-card-desc { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+
+  .card-english { border-top: 2px solid var(--english); }
+  .card-physics { border-top: 2px solid var(--physics); }
+  .card-chemistry { border-top: 2px solid var(--chemistry); }
+
+  /* API KEY MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .modal {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-bright);
+    border-radius: 12px;
+    padding: 2.5rem;
+    max-width: 480px;
+    width: 100%;
+  }
+
+  .modal h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .modal p {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: 1.5rem;
+  }
+
+  .modal label {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+
+  .modal input {
+    width: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    padding: 10px 14px;
+    outline: none;
+    margin-bottom: 1.5rem;
+    transition: border-color 0.2s;
+  }
+
+  .modal input:focus { border-color: var(--border-bright); }
+  .modal input::placeholder { color: var(--text-muted); }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--bg-deep);
+    border: none;
+    border-radius: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 9px 22px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .btn-primary:hover { background: var(--gold-light); }
+
+  .btn-secondary {
+    background: none;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 9px 22px;
+    cursor: pointer;
+  }
+
+  .gold-line {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 1rem 0;
+    opacity: 0.4;
+  }
+
+  /* SCROLLBAR SIDEBAR */
+  .sidebar::-webkit-scrollbar { width: 3px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border); }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .main { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .subject-cards { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="apiModal">
+  <div class="modal">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;">
+      <div class="logo-mark" style="width:44px;height:44px;font-size:20px;">T</div>
+      <div>
+        <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:600;">Tutor Académico Virtual</div>
+        <div style="font-size:11px;color:var(--text-muted);letter-spacing:0.1em;text-transform:uppercase;">Dr. Sandoval · UNAM</div>
+      </div>
+    </div>
+    <div class="gold-line"></div>
+    <h2>Configuración inicial</h2>
+    <p>Para activar el tutor con inteligencia artificial, ingresa tu API Key de Anthropic. La clave se guarda localmente en tu navegador y nunca se envía a ningún servidor externo.</p>
+    <label>Anthropic API Key</label>
+    <input type="password" id="apiKeyInput" placeholder="sk-ant-api03-..." />
+    <div style="background:rgba(201,146,42,0.08);border:1px solid rgba(201,146,42,0.2);border-radius:6px;padding:10px 14px;margin-bottom:1.5rem;">
+      <div style="font-size:12px;color:var(--text-secondary);line-height:1.6;">
+        <strong style="color:var(--gold-light);">Sin API Key</strong> — el tutor funciona en modo demostración con respuestas de ejemplo. Con la key, usa Claude 3 Haiku en tiempo real.
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="startDemo()">Modo demo</button>
+      <button class="btn-primary" onclick="saveApiKey()">Activar tutor IA</button>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo-area">
+    <div class="logo-mark">T</div>
+    <div>
+      <div class="logo-text">Tutor Académico Virtual</div>
+      <div class="logo-sub">Inglés · Física · Química</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:16px;">
+    <div id="statusBadge" style="font-size:11px;color:var(--text-muted);letter-spacing:0.06em;"></div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="btnES" onclick="setLang('es')">ES</button>
+      <button class="lang-btn" id="btnEN" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</header>
+
+<!-- SUBJECT TABS -->
+<div class="subject-bar">
+  <button class="subject-tab" id="tab-english" onclick="setSubject('english')">
+    <span class="tab-dot"></span> <span id="tabLabel-english">Inglés</span>
+  </button>
+  <button class="subject-tab" id="tab-physics" onclick="setSubject('physics')">
+    <span class="tab-dot"></span> <span id="tabLabel-physics">Física</span>
+  </button>
+  <button class="subject-tab" id="tab-chemistry" onclick="setSubject('chemistry')">
+    <span class="tab-dot"></span> <span id="tabLabel-chemistry">Química</span>
+  </button>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <!-- populated by JS -->
+  </div>
+
+  <!-- CHAT -->
+  <div class="chat-area">
+    <div class="chat-header" id="chatHeader">
+      <div>
+        <div class="chat-subject-name" id="chatSubjectName">Selecciona una materia</div>
+        <div class="chat-topic-label" id="chatTopicLabel">Elige un tema para comenzar</div>
+      </div>
+      <div class="level-chips">
+        <span class="chip active" id="chipBach" onclick="setLevel('bach')">Bachillerato</span>
+        <span class="chip" id="chipUni" onclick="setLevel('uni')">Universidad</span>
+      </div>
+    </div>
+
+    <!-- MESSAGES or WELCOME -->
+    <div class="messages" id="messagesArea">
+      <div class="welcome" id="welcomeScreen">
+        <div class="welcome-mark">T</div>
+        <div>
+          <h2 id="welcomeTitle">Bienvenido a tu Tutor Académico</h2>
+          <p id="welcomeDesc">Selecciona una materia y un tema para comenzar. Puedo explicar conceptos, resolver ejercicios paso a paso y prepararte para exámenes.</p>
+        </div>
+        <div class="subject-cards">
+          <div class="subject-card card-english" onclick="setSubject('english')">
+            <div class="subject-card-icon">🇬🇧</div>
+            <div class="subject-card-name" style="color:var(--english);">English</div>
+            <div class="subject-card-desc">Grammar, vocabulary, writing & comprehension</div>
+          </div>
+          <div class="subject-card card-physics" onclick="setSubject('physics')">
+            <div class="subject-card-icon">⚛️</div>
+            <div class="subject-card-name" style="color:var(--physics);" id="physCard">Física</div>
+            <div class="subject-card-desc" id="physCardDesc">Mecánica, electricidad, termodinámica</div>
+          </div>
+          <div class="subject-card card-chemistry" onclick="setSubject('chemistry')">
+            <div class="subject-card-icon">🧪</div>
+            <div class="subject-card-name" style="color:var(--chemistry);" id="chemCard">Química</div>
+            <div class="subject-card-desc" id="chemCardDesc">Átomos, reacciones, estequiometría</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK PROMPTS -->
+    <div class="quick-prompts" id="quickPrompts" style="display:none;"></div>
+
+    <!-- INPUT -->
+    <div class="input-area">
+      <textarea class="msg-input" id="msgInput" rows="1"
+        placeholder="Escribe tu pregunta aquí..."
+        onkeydown="handleKey(event)"
+        oninput="autoResize(this)"></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+        <svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUBJECTS = {
+  english: {
+    color: '#4A9EBF',
+    icon: '🇬🇧',
+    labels: { es: 'Inglés', en: 'English' },
+    topics: [
+      { id: 'grammar', icon: '📝', es: 'Gramática', en: 'Grammar', level: 'both',
+        quick_es: ['Explica los tiempos verbales','¿Qué es un modal verb?','Diferencia entre Present Perfect y Simple Past'],
+        quick_en: ['Explain tenses','What are modal verbs?','When to use Present Perfect?'] },
+      { id: 'vocabulary', icon: '📚', es: 'Vocabulario', en: 'Vocabulary', level: 'both',
+        quick_es: ['Palabras más comunes en inglés','Prefijos y sufijos en inglés','Sinónimos de "important"'],
+        quick_en: ['Most common English words','Prefixes and suffixes','Synonyms of "important"'] },
+      { id: 'writing', icon: '✍️', es: 'Escritura y redacción', en: 'Writing', level: 'both',
+        quick_es: ['Cómo escribir un essay','Conectores en inglés','Cómo escribir un email formal'],
+        quick_en: ['How to write an essay','Linking words','How to write a formal email'] },
+      { id: 'reading', icon: '🔍', es: 'Comprensión lectora', en: 'Reading Comprehension', level: 'both',
+        quick_es: ['Estrategias de lectura','¿Qué es skimming y scanning?','Inferencias en textos'],
+        quick_en: ['Reading strategies','Skimming vs scanning','Making inferences'] },
+      { id: 'speaking', icon: '🗣️', es: 'Conversación y fonética', en: 'Speaking & Phonetics', level: 'both',
+        quick_es: ['Pronunciación de verbos regulares','Diferencia entre /ʃ/ y /s/','Frases para conversación cotidiana'],
+        quick_en: ['Pronunciation of regular verbs','IPA basics','Common conversational phrases'] },
+      { id: 'academic_english', icon: '🎓', es: 'Inglés académico', en: 'Academic English', level: 'uni',
+        quick_es: ['Cómo citar en inglés APA','Vocabulario científico','Cómo escribir un abstract'],
+        quick_en: ['APA citations in English','Scientific vocabulary','How to write an abstract'] },
+    ]
+  },
+  physics: {
+    color: '#7B6BCA',
+    icon: '⚛️',
+    labels: { es: 'Física', en: 'Physics' },
+    topics: [
+      { id: 'kinematics', icon: '🚀', es: 'Cinemática', en: 'Kinematics', level: 'bach',
+        quick_es: ['¿Qué es velocidad media?','MRU vs MRUV','Ejercicio de caída libre'],
+        quick_en: ['Average velocity','Uniform motion','Free fall example'] },
+      { id: 'dynamics', icon: '⚡', es: 'Dinámica / Leyes de Newton', en: 'Dynamics / Newton\'s Laws', level: 'both',
+        quick_es: ['Explica las 3 leyes de Newton','¿Qué es la fuerza neta?','Ejercicio de plano inclinado'],
+        quick_en: ['Newton\'s 3 laws','Net force explained','Inclined plane problem'] },
+      { id: 'energy', icon: '🔋', es: 'Trabajo, energía y potencia', en: 'Work, Energy & Power', level: 'both',
+        quick_es: ['¿Qué es la energía potencial?','Principio de conservación de energía','Ejemplo de trabajo mecánico'],
+        quick_en: ['Potential energy','Conservation of energy','Work-energy theorem'] },
+      { id: 'waves', icon: '〰️', es: 'Oscilaciones y ondas', en: 'Waves & Oscillations', level: 'both',
+        quick_es: ['Diferencia entre onda transversal y longitudinal','¿Qué es el efecto Doppler?','Fórmula de frecuencia'],
+        quick_en: ['Transverse vs longitudinal waves','Doppler effect','Wave frequency formula'] },
+      { id: 'electricity', icon: '⚡', es: 'Electricidad y magnetismo', en: 'Electricity & Magnetism', level: 'both',
+        quick_es: ['Ley de Coulomb','Circuitos en serie y paralelo','¿Qué es el campo eléctrico?'],
+        quick_en: ['Coulomb\'s law','Series vs parallel circuits','Electric field'] },
+      { id: 'thermodynamics', icon: '🔥', es: 'Termodinámica', en: 'Thermodynamics', level: 'both',
+        quick_es: ['Las 4 leyes de la termodinámica','¿Qué es la entropía?','Ciclo de Carnot'],
+        quick_en: ['Laws of thermodynamics','What is entropy?','Carnot cycle'] },
+      { id: 'modern', icon: '🔬', es: 'Física moderna', en: 'Modern Physics', level: 'uni',
+        quick_es: ['Efecto fotoeléctrico','Relatividad especial de Einstein','Mecánica cuántica básica'],
+        quick_en: ['Photoelectric effect','Special relativity','Basic quantum mechanics'] },
+    ]
+  },
+  chemistry: {
+    color: '#5AAB7C',
+    icon: '🧪',
+    labels: { es: 'Química', en: 'Chemistry' },
+    topics: [
+      { id: 'atomic', icon: '⚛️', es: 'Estructura atómica', en: 'Atomic Structure', level: 'both',
+        quick_es: ['Modelos atómicos históricos','¿Qué son los números cuánticos?','Configuración electrónica'],
+        quick_en: ['Historical atomic models','Quantum numbers','Electron configuration'] },
+      { id: 'periodic', icon: '📊', es: 'Tabla periódica', en: 'Periodic Table', level: 'both',
+        quick_es: ['¿Cómo leer la tabla periódica?','Tendencias periódicas','Grupos y periodos'],
+        quick_en: ['How to read the periodic table','Periodic trends','Groups and periods'] },
+      { id: 'bonding', icon: '🔗', es: 'Enlace químico', en: 'Chemical Bonding', level: 'both',
+        quick_es: ['Diferencia entre enlace iónico y covalente','¿Qué es la electronegatividad?','Geometría molecular VSEPR'],
+        quick_en: ['Ionic vs covalent bonds','Electronegativity','VSEPR geometry'] },
+      { id: 'stoich', icon: '⚖️', es: 'Estequiometría', en: 'Stoichiometry', level: 'both',
+        quick_es: ['¿Qué es el mol?','Cómo balancear ecuaciones','Ejercicio de reactivo limitante'],
+        quick_en: ['What is a mole?','Balancing equations','Limiting reagent problem'] },
+      { id: 'reactions', icon: '💥', es: 'Reacciones químicas', en: 'Chemical Reactions', level: 'both',
+        quick_es: ['Tipos de reacciones químicas','¿Qué es la oxidación-reducción?','Reacciones ácido-base'],
+        quick_en: ['Types of chemical reactions','Oxidation-reduction','Acid-base reactions'] },
+      { id: 'solutions', icon: '💧', es: 'Soluciones y concentración', en: 'Solutions & Concentration', level: 'both',
+        quick_es: ['¿Qué es la molaridad?','Cómo preparar una solución','Punto de ebullición y fusión'],
+        quick_en: ['What is molarity?','How to prepare a solution','Boiling and melting points'] },
+      { id: 'organic', icon: '🌿', es: 'Química orgánica', en: 'Organic Chemistry', level: 'uni',
+        quick_es: ['Grupos funcionales básicos','Nomenclatura IUPAC de alcanos','Isomería estructural'],
+        quick_en: ['Basic functional groups','IUPAC nomenclature','Structural isomers'] },
+      { id: 'biochem', icon: '🧬', es: 'Bioquímica básica', en: 'Basic Biochemistry', level: 'uni',
+        quick_es: ['¿Qué son los carbohidratos?','Estructura de proteínas','Función del ATP'],
+        quick_en: ['What are carbohydrates?','Protein structure','Function of ATP'] },
+    ]
+  }
+};
+
+const UI_TEXT = {
+  es: {
+    welcome: 'Bienvenido a tu Tutor Académico',
+    welcomeDesc: 'Selecciona una materia y un tema para comenzar. Puedo explicar conceptos, resolver ejercicios paso a paso y prepararte para exámenes.',
+    placeholder: 'Escribe tu pregunta aquí...',
+    allTopics: 'Todos los temas',
+    bachTopics: 'Bachillerato',
+    uniTopics: 'Universidad',
+    thinking: 'El tutor está analizando tu pregunta...',
+    physCard: 'Física',
+    physCardDesc: 'Mecánica, electricidad, termodinámica',
+    chemCard: 'Química',
+    chemCardDesc: 'Átomos, reacciones, estequiometría',
+  },
+  en: {
+    welcome: 'Welcome to your Academic Tutor',
+    welcomeDesc: 'Select a subject and topic to begin. I can explain concepts, solve exercises step by step, and help you prepare for exams.',
+    placeholder: 'Type your question here...',
+    allTopics: 'All Topics',
+    bachTopics: 'High School',
+    uniTopics: 'University',
+    thinking: 'The tutor is analyzing your question...',
+    physCard: 'Physics',
+    physCardDesc: 'Mechanics, electricity, thermodynamics',
+    chemCard: 'Chemistry',
+    chemCardDesc: 'Atoms, reactions, stoichiometry',
+  }
+};
+
+let state = {
+  lang: 'es',
+  subject: null,
+  topic: null,
+  topicData: null,
+  level: 'bach',
+  messages: {},
+  apiKey: null,
+  demoMode: false,
+  isTyping: false,
+};
+
+function saveApiKey() {
+  const k = document.getElementById('apiKeyInput').value.trim();
+  if (!k || !k.startsWith('sk-ant')) {
+    document.getElementById('apiKeyInput').style.borderColor = '#E24B4A';
+    return;
+  }
+  state.apiKey = k;
+  localStorage.setItem('tutor_ak', k);
+  document.getElementById('apiModal').style.display = 'none';
+  document.getElementById('statusBadge').textContent = '● IA activa';
+  document.getElementById('statusBadge').style.color = '#5AAB7C';
+}
+
+function startDemo() {
+  state.demoMode = true;
+  document.getElementById('apiModal').style.display = 'none';
+  document.getElementById('statusBadge').textContent = '● Modo demo';
+  document.getElementById('statusBadge').style.color = 'var(--text-muted)';
+}
+
+function setLang(l) {
+  state.lang = l;
+  document.getElementById('btnES').classList.toggle('active', l === 'es');
+  document.getElementById('btnEN').classList.toggle('active', l === 'en');
+  document.getElementById('msgInput').placeholder = UI_TEXT[l].placeholder;
+  document.getElementById('welcomeTitle').textContent = UI_TEXT[l].welcome;
+  document.getElementById('welcomeDesc').textContent = UI_TEXT[l].welcomeDesc;
+  document.getElementById('physCard').textContent = UI_TEXT[l].physCard;
+  document.getElementById('physCardDesc').textContent = UI_TEXT[l].physCardDesc;
+  document.getElementById('chemCard').textContent = UI_TEXT[l].chemCard;
+  document.getElementById('chemCardDesc').textContent = UI_TEXT[l].chemCardDesc;
+  // update tabs
+  Object.keys(SUBJECTS).forEach(s => {
+    const el = document.getElementById('tabLabel-' + s);
+    if (el) el.textContent = SUBJECTS[s].labels[l];
+  });
+  // update chips
+  document.getElementById('chipBach').textContent = l === 'es' ? 'Bachillerato' : 'High School';
+  document.getElementById('chipUni').textContent = l === 'es' ? 'Universidad' : 'University';
+  if (state.subject) renderSidebar();
+  if (state.topicData) updateQuickPrompts();
+}
+
+function setSubject(s) {
+  state.subject = s;
+  state.topic = null;
+  state.topicData = null;
+  // tabs
+  ['english','physics','chemistry'].forEach(id => {
+    document.getElementById('tab-' + id).className = 'subject-tab' + (id === s ? ' active-' + id : '');
+  });
+  document.getElementById('chatSubjectName').textContent = SUBJECTS[s].labels[state.lang];
+  document.getElementById('chatSubjectName').style.color = SUBJECTS[s].color;
+  document.getElementById('chatTopicLabel').textContent = state.lang === 'es' ? 'Elige un tema del panel izquierdo' : 'Choose a topic from the left panel';
+  // show welcome if no topic
+  document.getElementById('welcomeScreen').style.display = 'flex';
+  document.getElementById('quickPrompts').style.display = 'none';
+  renderSidebar();
+  if (!state.messages[s]) state.messages[s] = {};
+}
+
+function setLevel(l) {
+  state.level = l;
+  document.getElementById('chipBach').classList.toggle('active', l === 'bach');
+  document.getElementById('chipUni').classList.toggle('active', l === 'uni');
+  if (state.subject) renderSidebar();
+}
+
+function renderSidebar() {
+  const s = state.subject;
+  if (!s) return;
+  const data = SUBJECTS[s];
+  const sb = document.getElementById('sidebar');
+  const l = state.lang;
+
+  sb.innerHTML = `
+    <div class="sidebar-section">
+      <div class="sidebar-title">${l === 'es' ? 'Temas · ' + data.labels[l] : 'Topics · ' + data.labels[l]}</div>
+      ${data.topics.map(t => {
+        const show = (t.level === 'both') || (t.level === state.level) || (state.level === 'uni');
+        if (!show) return '';
+        const isActive = state.topic === t.id;
+        const badgeClass = t.level === 'bach' ? 'badge-bach' : t.level === 'uni' ? 'badge-uni' : 'badge-both';
+        const badgeLabel = t.level === 'bach' ? (l === 'es' ? 'Bach' : 'HS') : t.level === 'uni' ? 'Uni' : '';
+        return `<button class="topic-btn ${isActive ? 'active active-' + s : ''}"
+          onclick="setTopic('${t.id}')">
+          <span class="topic-icon">${t.icon}</span>
+          <span>${t[l]}</span>
+          ${badgeLabel ? `<span class="level-badge ${badgeClass}">${badgeLabel}</span>` : ''}
+        </button>`;
+      }).join('')}
+    </div>
+  `;
+}
+
+function setTopic(topicId) {
+  const s = state.subject;
+  const data = SUBJECTS[s];
+  const t = data.topics.find(x => x.id === topicId);
+  if (!t) return;
+  state.topic = topicId;
+  state.topicData = t;
+
+  document.getElementById('chatTopicLabel').textContent = t[state.lang];
+  document.getElementById('welcomeScreen').style.display = 'none';
+  document.getElementById('quickPrompts').style.display = 'flex';
+  updateQuickPrompts();
+  renderSidebar();
+
+  // show existing messages or empty
+  const msgArea = document.getElementById('messagesArea');
+  const existing = (state.messages[s] && state.messages[s][topicId]) || [];
+  // clear except welcome
+  while (msgArea.children.length > 1) msgArea.removeChild(msgArea.lastChild);
+  existing.forEach(m => appendBubble(m.role, m.content, false));
+
+  if (existing.length === 0) {
+    // greeting
+    const greet = buildGreeting(t, s);
+    appendBubble('tutor', greet, true);
+    saveMsg('tutor', greet);
+  }
+}
+
+function buildGreeting(t, s) {
+  const l = state.lang;
+  const color = SUBJECTS[s].color;
+  const subjectLabel = SUBJECTS[s].labels[l];
+  const topicLabel = t[l];
+  const levelLabel = state.level === 'bach'
+    ? (l === 'es' ? 'bachillerato' : 'high school')
+    : (l === 'es' ? 'nivel universitario' : 'university level');
+
+  if (l === 'es') {
+    return `¡Hola! Soy tu tutor de **${subjectLabel}** — ${topicLabel}.
+
+Estoy aquí para ayudarte a dominar este tema a nivel **${levelLabel}**. Puedo:
+
+- Explicar conceptos desde cero o profundizar según tu nivel
+- Resolver ejercicios **paso a paso** con razonamiento completo
+- Prepararte para exámenes con preguntas de práctica
+- Responder en español o en inglés según prefieras
+
+¿Por dónde quieres empezar?`;
+  } else {
+    return `Hello! I'm your **${subjectLabel}** tutor — ${topicLabel}.
+
+I'm here to help you master this topic at the **${levelLabel}** level. I can:
+
+- Explain concepts from scratch or dive deep depending on your level
+- Solve exercises **step by step** with full reasoning
+- Prepare you for exams with practice questions
+- Respond in English or Spanish as you prefer
+
+Where would you like to start?`;
+  }
+}
+
+function updateQuickPrompts() {
+  const t = state.topicData;
+  if (!t) return;
+  const key = state.lang === 'es' ? 'quick_es' : 'quick_en';
+  const prompts = t[key] || [];
+  const qp = document.getElementById('quickPrompts');
+  qp.innerHTML = prompts.map(p =>
+    `<button class="quick-btn" onclick="sendQuick('${p.replace(/'/g,"\\'")}')">↗ ${p}</button>`
+  ).join('');
+}
+
+function sendQuick(text) {
+  document.getElementById('msgInput').value = text;
+  sendMessage();
+}
+
+function appendBubble(role, content, animate) {
+  const msgArea = document.getElementById('messagesArea');
+  const ws = document.getElementById('welcomeScreen');
+  if (ws) ws.style.display = 'none';
+
+  const row = document.createElement('div');
+  row.className = 'msg-row' + (role === 'user' ? ' user' : '');
+  if (!animate) row.style.animation = 'none';
+
+  const avatar = document.createElement('div');
+  avatar.className = 'avatar ' + (role === 'user' ? 'avatar-user' : 'avatar-tutor');
+  avatar.textContent = role === 'user' ? 'TÚ' : 'T';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble ' + (role === 'user' ? 'bubble-user' : 'bubble-tutor');
+  bubble.innerHTML = formatMarkdown(content);
+
+  row.appendChild(avatar);
+  row.appendChild(bubble);
+  msgArea.appendChild(row);
+  msgArea.scrollTop = msgArea.scrollHeight;
+  return bubble;
+}
+
+function showTyping() {
+  const msgArea = document.getElementById('messagesArea');
+  const row = document.createElement('div');
+  row.className = 'msg-row';
+  row.id = 'typingRow';
+
+  const avatar = document.createElement('div');
+  avatar.className = 'avatar avatar-tutor';
+  avatar.textContent = 'T';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble bubble-tutor';
+  bubble.innerHTML = `<div class="typing-indicator"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+
+  row.appendChild(avatar);
+  row.appendChild(bubble);
+  msgArea.appendChild(row);
+  msgArea.scrollTop = msgArea.scrollHeight;
+}
+
+function removeTyping() {
+  const t = document.getElementById('typingRow');
+  if (t) t.remove();
+}
+
+function saveMsg(role, content) {
+  const s = state.subject;
+  const t = state.topic;
+  if (!s || !t) return;
+  if (!state.messages[s]) state.messages[s] = {};
+  if (!state.messages[s][t]) state.messages[s][t] = [];
+  state.messages[s][t].push({ role, content });
+}
+
+async function sendMessage() {
+  if (state.isTyping) return;
+  const input = document.getElementById('msgInput');
+  const text = input.value.trim();
+  if (!text) return;
+  if (!state.subject || !state.topic) {
+    alert(state.lang === 'es' ? 'Selecciona una materia y un tema primero.' : 'Please select a subject and topic first.');
+    return;
+  }
+
+  input.value = '';
+  autoResize(input);
+  appendBubble('user', text, true);
+  saveMsg('user', text);
+
+  state.isTyping = true;
+  document.getElementById('sendBtn').disabled = true;
+  showTyping();
+
+  try {
+    const reply = await getAIResponse(text);
+    removeTyping();
+    appendBubble('tutor', reply, true);
+    saveMsg('tutor', reply);
+  } catch(e) {
+    removeTyping();
+    const errMsg = state.lang === 'es'
+      ? '⚠️ Error al conectar con el tutor. Verifica tu API Key o conexión.'
+      : '⚠️ Error connecting to the tutor. Check your API key or connection.';
+    appendBubble('tutor', errMsg, true);
+  }
+
+  state.isTyping = false;
+  document.getElementById('sendBtn').disabled = false;
+}
+
+async function getAIResponse(userMsg) {
+  if (state.demoMode || !state.apiKey) return getDemoResponse(userMsg);
+
+  const s = state.subject;
+  const t = state.topicData;
+  const l = state.lang;
+  const level = state.level === 'bach'
+    ? (l === 'es' ? 'bachillerato (preparatoria)' : 'high school (preparatory)')
+    : (l === 'es' ? 'nivel universitario (licenciatura)' : 'university (undergraduate)');
+
+  const systemPrompt = `You are an expert academic tutor specializing in ${SUBJECTS[s].labels.en} — specifically the topic of ${t.en}. 
+You are tutoring a ${level} student.
+The student's preferred language is ${l === 'es' ? 'Spanish' : 'English'}, but respond in whatever language the student writes in.
+Your teaching style is based on Dr. Álvaro Sandoval, a UNAM researcher with 25+ years experience. You are rigorous but encouraging.
+
+Guidelines:
+- Explain concepts clearly with real-world examples
+- Show step-by-step reasoning for problem-solving
+- Use proper scientific notation and formulas when needed
+- For English teaching: correct grammar gently but clearly
+- For Physics/Chemistry: include relevant formulas using plain text notation
+- Keep responses focused and educational
+- If the student makes an error, explain why and guide them to the correct answer
+- Be warm, encouraging, and academically rigorous
+
+Current subject: ${SUBJECTS[s].labels[state.lang]}
+Current topic: ${t[state.lang]}
+Level: ${level}`;
+
+  const history = (state.messages[s] && state.messages[s][state.topic]) || [];
+  const msgs = history.slice(-10).map(m => ({
+    role: m.role === 'tutor' ? 'assistant' : 'user',
+    content: m.content
+  }));
+  msgs.push({ role: 'user', content: userMsg });
+
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': state.apiKey, 'anthropic-version': '2023-06-01' },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5',
+      max_tokens: 1024,
+      system: systemPrompt,
+      messages: msgs
+    })
+  });
+
+  if (!res.ok) throw new Error('API error ' + res.status);
+  const data = await res.json();
+  return data.content[0].text;
+}
+
+function getDemoResponse(msg) {
+  const demos = {
+    es: [
+      `¡Excelente pregunta! Para responder con profundidad necesitarías activar el **modo IA** con tu API Key de Anthropic. En modo demo solo puedo darte respuestas de ejemplo.\n\n**Lo que haría el tutor IA:**\n- Analizaría tu pregunta específica\n- Explicaría el concepto paso a paso\n- Daría un ejemplo práctico\n- Te haría una pregunta de seguimiento para verificar tu comprensión\n\n¿Quieres activar el tutor completo?`,
+      `Esta es una pregunta muy interesante sobre el tema. En el **modo completo**, el tutor:\n\n1. Explicaría los conceptos fundamentales\n2. Resolvería el problema paso a paso\n3. Te mostraría la fórmula aplicada\n4. Propondría ejercicios similares para practicar\n\nActiva tu API Key para obtener respuestas personalizadas y precisas.`,
+    ],
+    en: [
+      `Great question! To answer in depth you would need to activate **AI mode** with your Anthropic API Key. In demo mode I can only give you example responses.\n\n**What the AI tutor would do:**\n- Analyze your specific question\n- Explain the concept step by step\n- Provide a practical example\n- Ask a follow-up question to check your understanding\n\nWant to activate the full tutor?`,
+      `That's a very interesting question about this topic. In **full mode**, the tutor would:\n\n1. Explain the core concepts clearly\n2. Solve the problem step by step\n3. Show the formula applied with values\n4. Suggest similar exercises to practice\n\nActivate your API Key for personalized, precise responses.`,
+    ]
+  };
+  const arr = demos[state.lang];
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function formatMarkdown(text) {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/^### (.+)$/gm, '<h4>$1</h4>')
+    .replace(/^## (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>')
+    .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/^(?!<[hul])(.+)$/gm, (m, p) => p.startsWith('<') ? m : `<p>${p}</p>`)
+    .replace(/<p><\/p>/g, '');
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+// INIT
+window.onload = () => {
+  const saved = localStorage.getItem('tutor_ak');
+  if (saved) {
+    state.apiKey = saved;
+    document.getElementById('apiModal').style.display = 'none';
+    document.getElementById('statusBadge').textContent = '● IA activa';
+    document.getElementById('statusBadge').style.color = '#5AAB7C';
+  }
+};
+</script>
+</body>
+</html>
