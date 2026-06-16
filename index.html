@@ -1342,13 +1342,10 @@ function autoResize(el) {
 
 // INIT
 window.onload = () => {
-  const saved = localStorage.getItem('tutor_ak');
-  if (saved) {
-    state.apiKey = saved;
-    document.getElementById('apiModal').style.display = 'none';
-    document.getElementById('statusBadge').textContent = '● IA activa';
-    document.getElementById('statusBadge').style.color = '#5AAB7C';
-  }
+  state.apiKey = 'sk-ant-api03-OODbQtPLSyGGcswUe1NqStudr3e0xXBhBnLKj8UlhUes2sj7tyVB5j6chmL9PJ7WR0d7j8WzqE2oy7L4-SO25Q—xTxEAAA';
+  document.getElementById('apiModal').style.display = 'none';
+  document.getElementById('statusBadge').textContent = '● IA activa';
+  document.getElementById('statusBadge').style.color = '#5AAB7C';
 };
 </script>
 </body>
