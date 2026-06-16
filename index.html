@@ -716,9 +716,56 @@
 
   /* Responsive */
   @media (max-width: 768px) {
-    .main { grid-template-columns: 1fr; }
-    .sidebar { display: none; }
+    .main { grid-template-columns: 1fr; display: flex; flex-direction: column; height: auto; }
     .subject-cards { grid-template-columns: 1fr; }
+
+    /* Sidebar horizontal en movil */
+    .sidebar {
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      overflow-y: hidden;
+      max-height: none;
+      min-height: 0;
+    }
+    .sidebar-section {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 6px;
+      padding: 10px 12px;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .sidebar-title { display: none; }
+    .topic-btn {
+      flex-shrink: 0;
+      padding: 7px 12px;
+      font-size: 12px;
+      border-radius: 20px;
+      white-space: nowrap;
+      border: 1px solid var(--border);
+    }
+    .level-badge { display: none; }
+
+    /* Chat area */
+    .chat-area { flex: 1; min-height: 0; }
+    .messages { max-height: 45vh; }
+
+    /* Header compacto */
+    .chat-header { padding: 0.75rem 1rem; flex-wrap: wrap; gap: 8px; }
+    .chat-subject-name { font-size: 16px; }
+    .level-chips { gap: 4px; }
+    .chip { font-size: 10px; padding: 3px 10px; }
+
+    /* Input */
+    .input-area { padding: 0.75rem 1rem; }
+    .quick-prompts { padding: 0.5rem 1rem; }
+    .quick-btn { font-size: 11px; padding: 5px 10px; }
+
+    /* Burbujas */
+    .bubble { max-width: 90%; font-size: 13.5px; }
+    .messages { padding: 1rem; }
   }
 </style>
 </head>
@@ -1342,7 +1389,7 @@ function autoResize(el) {
 
 // INIT
 window.onload = () => {
-  state.apiKey = 'sk-ant-api03-OODbQtPLSyGGcswUe1NqStudr3e0xXBhBnLKj8UlhUes2sj7tyVB5j6chmL9PJ7WR0d7j8WzqE2oy7L4-SO25Q—xTxEAAA';
+  state.apiKey = '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';
   document.getElementById('apiModal').style.display = 'none';
   document.getElementById('statusBadge').textContent = '● IA activa';
   document.getElementById('statusBadge').style.color = '#5AAB7C';
